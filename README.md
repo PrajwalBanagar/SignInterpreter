@@ -1,6 +1,6 @@
 # SignInterpreter
 A device to convert Hand Sign to Audio output
-Sign-interpreter
+
 ![WhatsApp Image 2021-09-03 at 7 13 36 PM](https://user-images.githubusercontent.com/46946896/132015270-82741eae-f47b-4276-8ce7-fc85fefddcc6.jpeg)
 
 
