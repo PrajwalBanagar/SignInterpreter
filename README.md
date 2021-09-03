@@ -1,5 +1,4 @@
 Sign-interpreter
-https://github.com/PrajwalBanagar/SignInterpreter/issues/1#issuecomment-912551265
 
 Introduction
 Today 1 in 20 people are speech impaired, i.e. they cant talk or hear. The speech impaired society uses sign language to overcome this challenge among themselves, but when it comes to communicating with the rest of the society, it gets more challenging. A very small sector of the society who aren't speech impaired can understand and communicate with sign languages.
