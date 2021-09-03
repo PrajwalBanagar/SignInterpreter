@@ -1,57 +1,113 @@
-# SignInterpreter
-A device to convert Hand Sign to Audio output
+# gesture-keyboard
+Gesture keyboard is a library used to convert accelerometer data to a sequence of characters and sentences.
 
-![WhatsApp Image 2021-09-03 at 7 13 36 PM](https://user-images.githubusercontent.com/46946896/132015270-82741eae-f47b-4276-8ce7-fc85fefddcc6.jpeg)
+If you want to implement or customize this yourself, [check out the tutorial below.](#how-to-use-the-library)
 
+# Warning: this repository has been archived
+It's been a long time since I've implemented this project, and unfortunately, I'm not in the condition of maintaining it anymore. Therefore, I decided to archive it. All the code will be available without limitations, and you can also fork the project to continue it if you want to do so.
 
-Introduction
-Today 1 in 20 people are speech impaired, i.e. they cant talk or hear. The speech impaired society uses sign language to overcome this challenge among themselves, but when it comes to communicating with the rest of the society, it gets more challenging. A very small sector of the society who aren't speech impaired can understand and communicate with sign languages.
+Thanks for all the interest! I wish you all the best :)
 
-Motivation
-The speech impaired part of the society faces a colossal challenge of communication with the society they live in. It is estimated that in the year 2050, 1 in 10 people are expected to be speech impaired. 
+## Demostration Video
+[Click here to watch the demonstration video](https://www.youtube.com/watch?v=OjTNS2ZKqRc)
 
-Our device is directed for the benefit of this speech impaired society.
-The device is a wearable glove with sensors mounted on it to capture the real time data. The device, with the aid of sensors and algorithms, tracks the exact movement and position of the hand when it's used, and converts the real time gestures to speech immediately as if they are communicating in real time with the help of the device.
+## Module
 
+In order to get the accelerometer data, I build a module using an Arduino, a MPU-6050 as accelerometer and a HC-06 to enable bluetooth comunication. The entire module gets powered by using a power bank.
 
+![The Arduino Module](images/module.jpg)
 
-Solution
-The project aims for the benefit of the speech impaired part of the society allowing them to communicate easily with the rest of the society.
-The core features of the device are,
-One Time investment and affordable 
-Customisable to any sign languages
-Portable and easy to use
-Connectivity to smartphones.
+When someone press the first button, the module starts to send accelerometer data to the pc.
+When the button is relased, the transmission stops.
 
-These core features make our device much more favourable and bring hope and provide a unique ability to the speech impaired society to express their views and thoughts with the society. 
+## Circuit
 
+The various components are connected as shown in the circuit schematic below.
 
-Working
- The device is a wearable glove with sensors like flex sensors and accelerometer, attached to it. These sensors are used to track the exact movement and position of the hand and fingers while the user communicates with the sign language. This data from the sensors is fed to the machine learning model on our smartphone over bluetooth which converts the gestures into respective speech corresponding to the gesture performed. 
+![Circuit](images/circuit.png)
 
+## Library
 
+The library it's written in Python and uses Scikit-learn's SVM (Support Vector Machine) algorithm to classify the signals into letters.
 
+### On Windows
+If you are using windows, the easiest way to download the needed libraries is to [download the Python(X,Y) distribution here.](https://python-xy.github.io/). It comes with all the necessary software built in.
 
-Implementation 
-Considering all the hand signs in sign language, we have decided on using 3 flex sensors attached along the thumb, index, and middle finger and an accelerometer on the rear part of the hand. For feasibility, the sensors will be attached to a comfortable glove that can be worn and removed with ease. The physical process of attaching the sensors is completed. The data is also being obtained from all the sensors successfully and is transferred to the system(laptop). The transfer of data is currently done through serial communication and is successful. Nevertheless, we are trying to transfer the data through Bluetooth communication to make the device wireless. Considering our requirement of obtaining the position of the hand, where the data might vary slightly each time even if the same hand signs are used, we have considered using the Support Vector Machine(SVM) algorithm. Presently the algorithm provides satisfactory results with 85 to 95 percent accuracy. As of now the device has been trained with limited gestures and further goals are to be reached.
+## How to Use the Library
 
+These are the basic steps needed to implement this library and to customize it.
 
+### Arduino
 
+Any Arduino will work for this project, you will also need an MPU-6050 accelerometer and a button.
 
+You can get the Arduino Sketch in the Arduino folder inside the project. You will probaby need to make a few changes to make it work.
 
-Value Proposition & Competitive Analysis
-The direct customers will be the speech impaired society. Hospitals and medical instrument outlets will be our secondary target. 
+**NOTE: If you don't want to use a Bluetooth module with this project, check out the BASIC version of the Sketch in the Arduino folder.**
 
-At present there are no primary competitors in the market. Such devices are in the prototype phase and are yet to evolve to reach the market. 
+After flashing the sketch to the Arduino, make sure that everything works correctly:
+* Open the Serial Monitor in the Arduino IDE
+* Set the baudrate to 38400
+* Press the button on the Arduino for a short time, you should see an output like this:
+```
+STARTING BATCH
+START -296 280 17140 -501 225 -1154 END
+START 724 152 16228 -396 298 -176 END
+START 372 16 16740 -346 219 -180 END
+...
+START 1096 1200 16644 -206 288 -2445 END
+START 1632 1060 16104 -290 95 -3108 END
+CLOSING BATCH
+```
 
-The thing that makes us unique is that, the device makes use of basic electronics which brings the product in affordable range, and also makes a great impact to the user’s lives. 
+### Gesture Keyboard Library
 
+Now that everything is working, let's dive into the library.
+While a Dataset is already included, you should create a new one for a few reasons:
+* Every device is different, even a small change in the accelerometer position makes the device less precise. **Everytime you change your device you should create a new dataset, to improve precision.**
+* If you want to change or add gestures, you have add new data to the dataset.
 
-Conclusion and Future Scope
+#### Working with the Dataset
 
-looking for many more amendments that can be brought to the project, like the bluetooth connectivity or using a powerful Microprocessor like raspberry pi which is much stronger and powerful and makes the device stand alone.
-Since the device is in it's prototype phase we are focusing more on its functionality rather than the comfort, as the comfort and the finishing will be a part of its manufacturing phase. We believe this revolutionary idea will help society immensely.
+Start by deleting the content of the `data` folder, we will replace it with a newly created dataset.
 
+This library was originally conceived to make a keyboard, so each gesture is associated with a character ( case sensitive ). This means that you can teach the algorithm a maximum of about 60 different gestures.
 
+Let's start a new recording batch, where you will record new samples for a specific gesture.
+Open the terminal and write:
 
+```
+python start.py target=a:0 port=COM6
+```
 
+Explanation:
+* The "target" argument tells the module that we want to record new samples for a specific gesture.
+* The "a" character is the one that characterize a gesture, it must be unique for every gesture and it must have a length of 1.
+* The "0" character is the *batch number*, it must be different every time you register a new batch to avoid sample overriding. For example, the first time you record a batch set it to 0, the next time 1 and so on.
+* The "port" represents the serial port your Arduino is connected to.
+
+When start.py is running, you will record different samples by pushing and relasing the integrated button on the Arduino. When the button is pressed, the library records the data from the accelerometer. For each gesture, a good number of samples is 40.
+
+Every sample get saved as a different file in the data folder.
+
+### Train the Model
+
+When your dataset is ready, you can use it to train the machine learning algorithm. This is pretty straightforward, open the terminal and write:
+
+```
+python learn.py
+```
+
+#### In case of problems:
+If you have problems with the library "model_selection", you have to upgrade your Sklearn dependency. 
+Try to use the command: `pip install --upgrade sklearn`.
+
+### Use the model
+
+To check out if the model is working, open the terminal and write:
+
+```
+python start.py port=<YOUR_SERIAL_PORT> predict
+```
+
+Now you can make gestures and see the algorithm predicting the correct one, most of the times :)
