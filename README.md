@@ -1,6 +1,8 @@
 # SignInterpreter
 A device to convert Hand Sign to Audio output
 Sign-interpreter
+![WhatsApp Image 2021-09-03 at 7 13 36 PM](https://user-images.githubusercontent.com/46946896/132015270-82741eae-f47b-4276-8ce7-fc85fefddcc6.jpeg)
+
 
 Introduction
 Today 1 in 20 people are speech impaired, i.e. they cant talk or hear. The speech impaired society uses sign language to overcome this challenge among themselves, but when it comes to communicating with the rest of the society, it gets more challenging. A very small sector of the society who aren't speech impaired can understand and communicate with sign languages.
